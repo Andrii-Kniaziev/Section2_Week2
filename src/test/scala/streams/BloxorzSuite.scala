@@ -66,6 +66,31 @@ class BloxorzSuite extends munit.FunSuite:
       assertEquals(solution.length, optsolution.length)
   }
 
+  test("neighbours with history") {
+    new Level1:
+      val er = Set(
+        (Block(Pos(1,2),Pos(1,3)), List(Move.Right,Move.Left,Move.Up)),
+        (Block(Pos(2,1),Pos(3,1)), List(Move.Down,Move.Left,Move.Up))
+      )
+
+      assertEquals(er, neighborsWithHistory(Block(Pos(1,1),Pos(1,1)), List(Move.Left,Move.Up)).toSet)
+  }
+
+  test("new neighbours only") {
+    new Level1:
+      val er = Set((Block(Pos(2,1),Pos(3,1)), List(Move.Down,Move.Left,Move.Up))).to(LazyList)
+      val res = newNeighborsOnly(
+        Set(
+          (Block(Pos(1,2),Pos(1,3)), List(Move.Right,Move.Left,Move.Up)),
+          (Block(Pos(2,1),Pos(3,1)), List(Move.Down,Move.Left,Move.Up))
+        ).to(LazyList),
+
+        Set(Block(Pos(1,2),Pos(1,3)), Block(Pos(1,1),Pos(1,1)))
+      )
+
+      assertEquals(er, res)
+  }
 
   import scala.concurrent.duration.*
   override val munitTimeout = 10.seconds
+
